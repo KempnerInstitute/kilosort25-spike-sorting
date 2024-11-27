@@ -1,0 +1,31 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH -c 4
+#SBATCH --partition=short
+#SBATCH --time=8:00:00
+#SBATCH --output=kilosort-%N.%x.%j.out
+#SBATCH --error=kilosort-%N.%x.%j.err
+
+DATA_PATH="location_of_your_data_dir"
+WORK_DIR="location_of_your_scratch_directory"
+PIPELINE_PATH="./"
+RESULTS_PATH="./output_dir"
+
+
+
+INPUT_DATA_TYPE="spikeglx"
+
+module load miniconda3/23.1.0
+source activate /n/data1/hms/neurobio/sabatini/bala/EPhys/software/nextflow_conda
+
+CONTAINER_DIR="/n/app/singularity/containers/shared/sabatini/EPhys_Singularity_Image/"
+
+/n/data1/hms/neurobio/sabatini/bala/EPhys/cred/kachery_shared_setup.sh
+
+CONTAINER_DIR=$CONTAINER_DIR DATA_PATH=$DATA_PATH RESULTS_PATH=$RESULTS_PATH nextflow  -C $PIPELINE_PATH/nextflow_slurm.config \
+    -log $RESULTS_PATH/nextflow.log \
+    run $PIPELINE_PATH/main_slurm.nf \
+    -work-dir $WORK_DIR \
+    --n_jobs 4 \
+    --job_dispatch_args "--input $INPUT_DATA_TYPE"  
+   
