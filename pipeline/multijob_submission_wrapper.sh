@@ -30,7 +30,7 @@ for element in "${dir_data_array[@]}"
 do
     new_data_path=$(echo -n "DATA_PATH=\"";echo "${element}""\"")
     new_results_path=$(echo -n "RESULTS_PATH=\"";echo "${out_dir}""_""${counter}""\"")
-    new_pipeline_path=$(echo -n "PIPELINE_PATH=\"";echo "${pipeline_path}""./..""\"")
+    new_pipeline_path=$(echo -n "PIPELINE_PATH=\"";echo "${pipeline_path}""/..""\"")
     echo $new_pipeline_path
     mkdir -p pipeline_jobdir_$counter  
     cd pipeline_jobdir_$counter
